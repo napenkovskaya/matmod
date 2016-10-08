@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 import euler
 
 from math import sin, cos, log

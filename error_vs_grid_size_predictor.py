@@ -1,3 +1,4 @@
+# encoding: UTF-8
 import predictor_corrector as pc
 
 from math import sin, cos, log
@@ -20,25 +21,34 @@ start_N = 5
 iterations = 4
 
 
-errors = []
+errors = [] # тут будут глобальные ошибки для каждого размера сетки в виде [(размер сетки, ошибка), (размер сетки, ошибка), ... ]
 
 
+# для сеток от 5 до дофига
 for grid_multiplier in range(0, 12):
     grid_size = start_N * (2**grid_multiplier)
     
+    # вычисляем приближенное решение
     approx = pc.solve (derivative = derivative, start_x = start, end_x = end, grid_size=grid_size, start_value=precise(start), extra_iterations = iterations)
+    
+    # только чтобы посчитать ошибки
     local_errors = pc.local_error (approx, precise)
     
+    # и найти максимальную
     global_error = max ([x[1] for x in local_errors])
+    
+    # добавляем в массивчик
     errors.append((grid_size, global_error))
     
+# рисуем по отработанной схеме
 plot.figure ()
 
+# по заданию обе оси должны быть логарифмическими. тогда получается симпатичный почти прямой график
 plot.xscale('log')
 plot.yscale('log')
 
 
-x_val = [x[0] for x in errors]
+x_val = [x[0] for x in errors] 
 y_val = [x[1] for x in errors]
 
 plot.plot (x_val, y_val, color="green", label="error", )
@@ -49,27 +59,35 @@ plot.savefig ("error_vs_grid_predictor.pdf")
     
     
     
-    
+# считаем критерии сходимости (или чо это там...)
     
 p_asterisk = []
 p_tilda = []
 
+# копируем массив ошибок чобы не проебать
 tmp_errors = errors
 
+# предыдущие значения (изымаем первый элемент из массива ошибок)
 prev_size, prev_err = tmp_errors.pop(0)
 
+# шагаем по оставшимся значениям
 for size, err in tmp_errors:
+    # и считаем  для каждого значения циферки по формуле из задания 
+    # log (x, 2) = логарифм второй степени из x
     p_asterisk.append( (size, log(prev_err/err, 2)) )
-    prev_size = size
+    prev_size = size # текущие ошибки становятся предыдущими
     prev_err = err
     
 
+
+# то же самое, но нам уже нужны три значения - текущее, предыдущее и пред-предыдущее
 tmp_errors = errors
 
 prev_prev_size, prev_prev_err = tmp_errors.pop(0)
 prev_size, prev_err = tmp_errors.pop(0)
 
 for size, err in tmp_errors:
+    # ну и формула другая..
     p_tilda.append ( (size, log((prev_prev_err - prev_err)/(prev_err - err), 2)) )
     prev_prev_size = prev_size
     prev_prev_err = prev_err
@@ -82,7 +100,7 @@ for size, err in tmp_errors:
 plot.figure ()
 
 plot.xscale('log')
-#plot.yscale('log')
+#plot.yscale('log') # у нас и так логарифм есть в подсчете, зачем нам еще один...
 
 x_val = [x[0] for x in p_asterisk]
 y_val = [x[1] for x in p_asterisk]

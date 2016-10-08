@@ -1,34 +1,45 @@
-from __future__ import division # ensure every division is floating point by default
+# encoding: UTF-8
+
+from __future__ import division # чтобы любое деление было гарантированно с плавающей точкой
 
 
 # solves ODE using Euler method given the derivative function (right-hand side of the equation), interval, number of steps and start value
+# решатель ОДУ методом эйлера. принимает (функцию!) производную, интервал (start_x ... end_x), размер сетки и начальное значение
 def solve (derivative, start_x, end_x, grid_size, start_value):
+    # массив для хранения решения. первое значение известно из аргументов.
     solution = [(start_x, start_value)]
     
+    # вычисляем шаг сетки
     step = (end_x - start_x) / grid_size
     
+    # текщие значения на текущем шаге сетки
     current_x = start_x
     current_value = start_value
     
+    # идем по интервалу от начала до конца
     while current_x <= end_x:
-        # current value is only required for artificially added error
+        # собственно ФОРМУЛА для метода Эйлера
         current_value = current_value + step * derivative (current_x, current_value)
-        current_x = current_x + step
-        solution.append ((current_x, current_value))
+        
+        current_x = current_x + step # передвигаем текущее значение по иксу на слеудющий шаг сетки
+        solution.append ((current_x, current_value)) # добавляем в массим приближенных значений
         
     
-    return solution # list of tuples (x, y)
+    return solution # список кортежей (x, y)
 
 
-# calculates local error for approx (list of tuples) compared to the precise (function!)
+# для удобства. вычисляет локальную погрешность из заданного приближенного решения и функции для вычисления точного
 def local_error (approx, precise):
+    # массив погрешностей
     errors = []
+    
+    # для каждого x и y приближенного решения...
     for x, y in approx:
         errors.append((x, abs(y - precise (x))))
 
     return errors
 
-# generates list of values in the same form as returned from euler solver but for the precise solution (needed for plotting)
+# для удобства. генерирует массив точных значений в том же формате что и .solve (нужно для построения графиков)
 def generate_precise (precise_func, start, end, grid_size):
     step = (end-start)/grid_size
     current_x = start
