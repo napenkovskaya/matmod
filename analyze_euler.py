@@ -72,7 +72,7 @@ f = open('euler.csv', 'w')
 print ("x,approx,precise,error", file=f)
 
 for x, app in approx:
-    print ("{0},{1},{2}".format (x, app, abs(app-precise(x))), file=f)
+    print ("{0},{1},{2},{3}".format (x, app, precise(x),abs(app-precise(x))), file=f)
 
 f.close()
 
