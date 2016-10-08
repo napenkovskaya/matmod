@@ -1,4 +1,5 @@
 from __future__ import division
+from __future__ import print_function
 
 import predictor_corrector as pc
 
@@ -40,14 +41,25 @@ x_val = [x[0] for x in precise_plot]
 y_val = [x[1] for x in precise_plot]
 plot.plot (x_val, y_val, color="black", label="precise")
 
-#x_val = [x[0] for x in errors]
-#y_val = [x[1] for x in errors]
+x_val = [x[0] for x in errors]
+y_val = [x[1] for x in errors]
 
-#global_error = max (y_val)
-#print "global error: ", global_error
-#plot.plot (x_val, y_val, color="red", label="errors")
+global_error = max (y_val)
+
+print ("global error: {}".format(global_error))
+
+plot.plot (x_val, y_val, color="red", label="errors")
 
 plot.savefig ("plot_predictor.pdf")
+
+
+f = open('predictor.csv', 'w')
+print ("x,approx,precise,error", file=f)
+
+for x, app in approx:
+    print ("{0},{1},{2}".format (x, app, abs(app-precise(x))), file=f)
+
+f.close()
 
 
 
