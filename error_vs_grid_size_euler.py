@@ -1,5 +1,5 @@
 # encoding: UTF-8
-
+from __future__ import division, print_function
 import euler
 
 from math import sin, cos, log
@@ -43,7 +43,7 @@ y_val = [x[1] for x in errors]
 
 plot.plot (x_val, y_val, color="green", label="error", )
 
-plot.savefig ("error_vs_grid_euler.pdf")
+plot.savefig ("error_vs_grid_euler.png")
     
 p_asterisk = []
 p_tilda = []
@@ -89,7 +89,31 @@ y_val = [x[1] for x in p_tilda]
 
 plot.plot (x_val, y_val, color="red", label="p_tilda", )
 
-plot.savefig ("p_asterisk_p_tilda_euler.pdf")
+plot.savefig ("p_asterisk_p_tilda_euler.png")
+
+
+f = open('p_asterisk_euler.csv', 'w')
+print ("size,p*", file=f)
+
+for size, p in p_asterisk:
+    print ("{0},{1}".format (size, p), file=f)
+
+f.close()
+
+f = open('p_tilda_euler.csv', 'w')
+print ("size,p~", file=f)
+
+for size, p in p_tilda:
+    print ("{0},{1}".format (size, p), file=f)
+
+f.close()
+
+
+
+
+
+
+
 
     
     

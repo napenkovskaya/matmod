@@ -21,7 +21,7 @@ def derivative (x, y): # производная
 start = 0
 end = 7
 
-N = 4000 
+N = 320
 
 # возвращает массив кортежей вида [(x, y), (x, y), ...]
 approx = euler.solve (derivative = derivative, start_x = start, end_x = end, grid_size=N, start_value=precise(start))
@@ -60,14 +60,14 @@ global_error = max (y_val)
 #plot.plot (x_val, y_val, color="red", label="errors")
 
 # сохраняем картинку
-plot.savefig ("plot_euler.pdf")
+plot.savefig ("plot_euler_{}.png".format(N))
 
 
 print ("global error: {}".format(global_error))
 
 
 # отгрузка циферок в файл
-f = open('euler.csv', 'w')
+f = open('euler_{}.csv'.format(N), 'w')
 
 print ("x,approx,precise,error", file=f)
 

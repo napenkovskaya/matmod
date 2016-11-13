@@ -20,9 +20,9 @@ def derivative (x, y):
 
 start = 0
 end = 7
-N = 400
+N = 640
 
-iterations = 10
+iterations = 4
 
 
 
@@ -50,12 +50,12 @@ global_error = max (y_val)
 
 print ("global error: {}".format(global_error))
 
-plot.plot (x_val, y_val, color="red", label="errors")
+#plot.plot (x_val, y_val, color="red", label="errors")
 
-plot.savefig ("plot_predictor.pdf")
+plot.savefig ("plot_predictor_{}.png".format(N))
 
 
-f = open('predictor.csv', 'w')
+f = open('predictor_{}.csv'.format(N), 'w')
 print ("x,approx,precise,error", file=f)
 
 for x, app in approx:
